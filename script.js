@@ -75,10 +75,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const categoryList = document.createElement('div');
         categoryList.className = 'category-list';
 
-        categories.forEach(category => {
+        categories.forEach((category, index) => {
             const card = document.createElement('div');
             card.className = 'category-card';
             card.innerText = category.name;
+            card.style.setProperty('--i', index);
             card.onclick = () => {
                 state.currentPage = 'products';
                 state.currentCategoryId = category.id;
@@ -115,11 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        filteredProducts.forEach(product => {
+        filteredProducts.forEach((product, index) => {
             const card = document.createElement('div');
             card.className = 'product-card';
+            card.style.setProperty('--i', index);
             card.innerHTML = `
-                <img src="${product.imageUrl}" alt="${product.name}" style="width:100px; height:100px; object-fit: cover;">
+                <img src="${product.imageUrl}" alt="${product.name}" style="width:100px; height:100px; object-fit: cover; border-radius: 8px;">
                 <h3>${product.name}</h3>
                 <p>${product.price}</p>
             `;
