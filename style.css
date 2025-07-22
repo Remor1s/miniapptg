@@ -1,0 +1,53 @@
+:root {
+    --bg-color: #f0f0f0;
+    --text-color: #333;
+    --card-bg-color: #fff;
+    --accent-color: #007bff;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+#app {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.category-list, .product-list {
+    display: grid;
+    grid-gap: 15px;
+}
+
+.category-card, .product-card {
+    background-color: var(--card-bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.category-card:hover, .product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-detail img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+} 
