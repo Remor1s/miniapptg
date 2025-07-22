@@ -21,20 +21,17 @@ body {
     min-height: 100vh;
 }
 
-body::before {
-    content: '';
+#particle-canvas {
     position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: 
-        radial-gradient(circle at 20% 30%, #7639e0, transparent 40%),
-        radial-gradient(circle at 80% 70%, #3498db, transparent 40%),
-        radial-gradient(circle at 50% 50%, #e74c3c, transparent 30%);
-    background-size: 300% 300%;
-    animation: aurora 20s linear infinite;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
+}
+
+body::before {
+    display: none; /* Disabling the old aurora animation */
 }
 
 @keyframes aurora {
@@ -65,6 +62,7 @@ body::before {
 }
 
 .theme-switcher {
+    display: none; /* Hiding the theme switcher */
     cursor: pointer;
     font-size: 24px;
     transition: transform 0.3s;

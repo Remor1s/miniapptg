@@ -2,21 +2,91 @@ document.addEventListener('DOMContentLoaded', () => {
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // --- PARTICLE ANIMATION ---
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray;
+
+    class Particle {
+        constructor(x, y, size, speedX, speedY) {
+            this.x = x;
+            this.y = y;
+            this.size = size;
+            this.speedX = speedX;
+            this.speedY = speedY;
+        }
+        draw() {
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.closePath();
+            ctx.fill();
+        }
+        update() {
+            if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+            if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.draw();
+        }
+    }
+
+    function initParticles() {
+        particlesArray = [];
+        const numberOfParticles = (canvas.height * canvas.width) / 9000;
+        for (let i = 0; i < numberOfParticles; i++) {
+            const size = Math.random() * 2 + 1;
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const speedX = (Math.random() - 0.5) * 0.5;
+            const speedY = (Math.random() - 0.5) * 0.5;
+            particlesArray.push(new Particle(x, y, size, speedX, speedY));
+        }
+    }
+
+    function connectParticles() {
+        const maxDistance = 100;
+        for (let a = 0; a < particlesArray.length; a++) {
+            for (let b = a; b < particlesArray.length; b++) {
+                const dx = particlesArray[a].x - particlesArray[b].x;
+                const dy = particlesArray[a].y - particlesArray[b].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDistance) {
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / maxDistance})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        connectParticles();
+        for (let i = 0; i < particlesArray.length; i++) {
+            particlesArray[i].update();
+        }
+        requestAnimationFrame(animateParticles);
+    }
+    
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+    });
+
     const app = document.getElementById('app');
     const pageTitle = document.getElementById('page-title');
-    const themeSwitcher = document.querySelector('.theme-switcher');
-
-    // --- THEME SWITCHER ---
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    document.body.className = currentTheme + '-theme';
-    themeSwitcher.innerText = currentTheme === 'light' ? '🌙' : '☀️';
-
-    themeSwitcher.addEventListener('click', () => {
-        let theme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
-        document.body.className = theme + '-theme';
-        themeSwitcher.innerText = theme === 'light' ? '🌙' : '☀️';
-        localStorage.setItem('theme', theme);
-    });
 
     // --- DATA ---
     const categories = [
